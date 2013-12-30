@@ -359,6 +359,12 @@ def prototype(lgeos, geos_version):
     lgeos.GEOSDistance.restype = c_int
     lgeos.GEOSDistance.argtypes = [c_void_p, c_void_p, c_void_p]
 
+    if geos_version >= (3, 4, 0):
+        lgeos.GEOSNearestPoints.restype = c_void_p
+        lgeos.GEOSNearestPoints.argtypes = [c_void_p, c_void_p]
+
+
+
     '''
     Reader and Writer APIs
     '''

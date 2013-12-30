@@ -490,6 +490,14 @@ class BaseGeometry(object):
         """Returns the union of the geometries (Shapely geometry)"""
         return geom_factory(self.impl['union'](self, other))
 
+    def nearest_points(self, other):
+        """Returns the the coordinates (Shapely CoordinateSequence) of the
+        nearest points in the input geometries. The points are presented in
+        the same order as the input Geometries."""
+        return CoordinateSequence(parent=None, cseq=self.impl['nearest_points'](self, other))
+
+
+
     # Unary predicates
     # ----------------
 

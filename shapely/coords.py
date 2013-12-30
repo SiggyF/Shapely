@@ -53,12 +53,19 @@ class CoordinateSequence(object):
     _ndim = None
     __p__ = None
 
-    def __init__(self, parent):
+    def __init__(self, parent, cseq=None):
         self.__p__ = parent
+        if cseq is not None:
+            # Set cseq directly (no parent)
+            self._cseq = cseq
+            self.__p__ = None
 
     def _update(self):
-        self._ndim = self.__p__._ndim
-        self._cseq = lgeos.GEOSGeom_getCoordSeq(self.__p__._geom)
+        if self.__p__ is not None:
+            self._ndim = self.__p__._ndim
+            self._cseq = lgeos.GEOSGeom_getCoordSeq(self.__p__._geom)
+        else:
+            self._ndim = self.ndim
 
     def __len__(self):
         self._update()
@@ -169,6 +176,13 @@ class CoordinateSequence(object):
             lgeos.GEOSCoordSeq_getY(self._cseq, i, byref(temp))
             y.append(temp.value)
         return x, y
+    @property
+    def ndim(self):
+        """Returns the dimension (number of ordinates in each coordinate) for this sequence."""
+        ndim = c_uint()
+        # also returns 3 if only x,y
+        lgeos.GEOSCoordSeq_getDimensions(self._cseq, byref(ndim))
+        return ndim.value
 
 
 class BoundsOp(Validating):

@@ -111,6 +111,13 @@ IMPL320 = {
     'interpolate': (InterpolateOp, 'interpolate'),
     'buffer_with_style': (UnaryTopologicalOp, 'buffer_with_style'),
     }
+IMPL330 = {
+    'unary_union': (BinaryTopologicalOp, 'unary_union'),
+    'cascaded_union': (BinaryTopologicalOp, 'unary_union')
+}
+IMPL340 = {
+    'nearest_points': (BinaryTopologicalOp, 'nearest_points')
+}
 
 def impl_items(defs):
     return [(k, v[0](v[1])) for k, v in list(defs.items())]
@@ -122,5 +129,9 @@ if lgeos.geos_version >= (3, 1, 1):
     imp.update(impl_items(IMPL311))
 if lgeos.geos_version >= (3, 2, 0):
     imp.update(impl_items(IMPL320))
+if lgeos.geos_version >= (3, 3, 0):
+    imp.update(impl_items(IMPL330))
+if lgeos.geos_version >= (3, 4, 0):
+    imp.update(impl_items(IMPL340))
 
 DefaultImplementation = imp
